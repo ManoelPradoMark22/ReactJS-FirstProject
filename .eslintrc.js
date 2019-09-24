@@ -29,7 +29,8 @@ module.exports = {
     'react/jsx-filename-extension': [
       'warn',
       { extensions: ['.jsx', '.js'] }
-    ],//vai retornar um warning somente se o arq nao for .jsx nem .js
-    'import/prefer-default-export': 'off'
+    ],
+    'import/prefer-default-export': 'off',
+    'react/state-in-constructor': 'off'
   },
 };
