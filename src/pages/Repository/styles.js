@@ -31,9 +31,14 @@ export const Owner = styled.header`
     margin-top: 20px;
   }
 
-  h1 {
+  a.repoLink {
+    color: #000;
     font-size: 24px;
     margin-top: 10px;
+
+    &:hover {
+      color: #7159c1;
+    }
   }
 
   p {

@@ -54,6 +54,7 @@ export default class Repository extends Component {
 
   render() {
     const { repository, issues, loading } = this.state; // somente para o eslint nao apontar erro
+    const { match } = this.props;
 
     if (loading) {
       return <Loading>Carregando</Loading>;
@@ -62,13 +63,21 @@ export default class Repository extends Component {
     return (
       <Container>
         <Owner>
-          <Link to="/">Voltar</Link>
+          <Link to="/">Home</Link>
           <div>
             <img
               src={repository.owner.avatar_url}
               alt={repository.owner.login}
             />
-            <h1>{repository.name}</h1>
+            <a
+              className="repoLink"
+              href={`https://github.com/${decodeURIComponent(
+                match.params.repository
+              )}`}
+              target="_blank"
+            >
+              {repository.name}
+            </a>
             <p>{repository.description}</p>
           </div>
         </Owner>
@@ -79,7 +88,9 @@ export default class Repository extends Component {
               <img src={issue.user.avatar_url} alt={issue.user.login} />
               <div>
                 <strong>
-                  <a href={issue.html_url}>{issue.title}</a>
+                  <a href={issue.html_url} target="_blank">
+                    {issue.title}
+                  </a>
                   {/* LABELS */}
                   {issue.labels.map(label => (
                     <span key={String(label.id)}>{label.name}</span>

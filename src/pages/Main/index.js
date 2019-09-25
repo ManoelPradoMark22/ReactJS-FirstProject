@@ -35,27 +35,41 @@ export default class Main extends Component {
   handleInputChange = e => {
     /* armazenando o valor do input dentro da
     variável newRepo */
+
     this.setState({ newRepo: e.target.value });
   };
 
   handleSubmit = async e => {
     e.preventDefault();
 
-    this.setState({ loading: true });
-
     const { newRepo, repositories } = this.state;
 
-    const response = await api.get(`/repos/${newRepo}`);
+    if (newRepo.length === 0) {
+      return;
+    }
 
-    const data = {
-      name: response.data.full_name,
-    };
+    this.setState({ loading: true });
 
-    this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-      loading: false,
-    });
+    try {
+      const response = await api.get(`/repos/${newRepo}`);
+
+      const data = {
+        name: response.data.full_name,
+      };
+
+      this.setState({
+        repositories: [...repositories, data],
+        newRepo: '',
+        loading: false,
+      });
+    } catch (err) {
+      // eslint-disable-next-line no-alert
+      alert('O repositório não existe!');
+      this.setState({
+        newRepo: '',
+        loading: false,
+      });
+    }
   };
 
   render() {
@@ -90,12 +104,21 @@ export default class Main extends Component {
             /* O primeiro elemento que vem depois (e dentro) de um .map(),
             no React, precisa de especificar uma key. */
             <li key={repository.name}>
-              <span>{repository.name}</span>
+              <a
+                className="repoLink"
+                href={`https://github.com/${repository.name}`}
+                target="_blank"
+              >
+                {repository.name}
+              </a>
               {/* <a href="/repository">Detalhes</a> assim iria recarregar a pg!!
             entao utilizaremos o Link. perceba que precisaremos utilizar o encode,
           já q no nome do repositorio tem uma / , entao o encode irá trocar a /
           por %2F */}
-              <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
+              <Link
+                className="detailsLink"
+                to={`/repository/${encodeURIComponent(repository.name)}`}
+              >
                 Detalhes
               </Link>
             </li>

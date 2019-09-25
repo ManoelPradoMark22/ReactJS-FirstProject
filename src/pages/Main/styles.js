@@ -79,7 +79,17 @@ export const List = styled.ul`
       border-top: 1px solid #eee;
     }
 
-    a {
+    a.repoLink {
+      color: #000;
+      text-decoration: none;
+
+      &:hover {
+        color: #7159c1;
+        font-weight: bold;
+      }
+    }
+
+    a.detailsLink {
       color: #7159c1;
       text-decoration: none;
     }
