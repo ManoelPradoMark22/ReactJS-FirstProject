@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
-import { thisExpression } from '@babel/types';
 import api from '../../services/api';
 
-import { Container, Form, SubmitButton, List } from './styles';
+import Container from '../../components/Container';
+import { Form, SubmitButton, List } from './styles';
 
 export default class Main extends Component {
   state = {
@@ -90,7 +91,13 @@ export default class Main extends Component {
             no React, precisa de especificar uma key. */
             <li key={repository.name}>
               <span>{repository.name}</span>
-              <a href="#">Detalhes</a>
+              {/* <a href="/repository">Detalhes</a> assim iria recarregar a pg!!
+            entao utilizaremos o Link. perceba que precisaremos utilizar o encode,
+          já q no nome do repositorio tem uma / , entao o encode irá trocar a /
+          por %2F */}
+              <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
+                Detalhes
+              </Link>
             </li>
           ))}
         </List>
