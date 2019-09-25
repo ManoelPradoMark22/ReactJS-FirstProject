@@ -7,10 +7,12 @@ export const Form = styled.form`
 
   input {
     flex: 1; /*vai ocupar todo espaco possivel! */
-    border: 1px solid #eee;
+    border: 2px solid ${props => (props.error ? '#FF0000' : '#eee')};
     padding: 10px 15px; /*10px vertical e 15 px horizontal */
     border-radius: 4px;
     font-size: 16px;
+
+    transition: border 0.25s ease-out;
   }
 `;
 

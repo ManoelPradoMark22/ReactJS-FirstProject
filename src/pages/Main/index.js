@@ -12,6 +12,7 @@ export default class Main extends Component {
     newRepo: '',
     repositories: [],
     loading: false,
+    error: null,
   };
 
   // Carregar os dados do localStorage
@@ -36,21 +37,25 @@ export default class Main extends Component {
     /* armazenando o valor do input dentro da
     variável newRepo */
 
-    this.setState({ newRepo: e.target.value });
+    this.setState({ newRepo: e.target.value, error: null });
   };
 
   handleSubmit = async e => {
     e.preventDefault();
 
-    const { newRepo, repositories } = this.state;
-
-    if (newRepo.length === 0) {
-      return;
-    }
-
-    this.setState({ loading: true });
+    this.setState({ loading: true, error: false });
 
     try {
+      const { newRepo, repositories } = this.state;
+
+      // eslint-disable-next-line no-throw-literal
+      if (newRepo === '') throw 'Insira um repositório!';
+
+      const hasRepo = repositories.find(r => r.name === newRepo);
+
+      // eslint-disable-next-line no-throw-literal
+      if (hasRepo) throw 'Este repositório já foi adicionado!';
+
       const response = await api.get(`/repos/${newRepo}`);
 
       const data = {
@@ -60,20 +65,16 @@ export default class Main extends Component {
       this.setState({
         repositories: [...repositories, data],
         newRepo: '',
-        loading: false,
       });
-    } catch (err) {
-      // eslint-disable-next-line no-alert
-      alert('O repositório não existe!');
-      this.setState({
-        newRepo: '',
-        loading: false,
-      });
+    } catch (error) {
+      this.setState({ error: true });
+    } finally {
+      this.setState({ loading: false });
     }
   };
 
   render() {
-    const { newRepo, repositories, loading } = this.state;
+    const { newRepo, repositories, loading, error } = this.state;
 
     return (
       <Container>
@@ -82,7 +83,7 @@ export default class Main extends Component {
           Repositórios
         </h1>
 
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} error={error}>
           <input
             type="text"
             placeholder="Adicionar repositório"
